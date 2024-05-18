@@ -12,4 +12,4 @@
   status = 200
 
 [functions]
-  directory = "backend"
+  directory = "netlify\functions"
