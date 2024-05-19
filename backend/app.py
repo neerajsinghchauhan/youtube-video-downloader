@@ -3,7 +3,14 @@ from flask_cors import CORS
 from pytube import YouTube
 
 app = Flask(__name__)
-CORS(app,origins="https://neeraj-youtube-video-downloader.netlify.app")
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, X-Auth-Token, Origin, Authorization'
+    return response
 
 @app.route('/download', methods=['POST'])
 def download_video():
