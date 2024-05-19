@@ -6,6 +6,6 @@
 
 [[redirects]]
   from = "/*"
-  to = "/"
+  to = "/download"
   status = 200
 
