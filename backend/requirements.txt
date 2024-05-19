@@ -19,3 +19,4 @@ urllib3==2.2.1
 websockets==12.0
 Werkzeug==3.0.3
 zipp==3.18.1
+gunicorn==24.0
