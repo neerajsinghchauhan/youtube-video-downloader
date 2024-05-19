@@ -3,7 +3,7 @@ from flask_cors import CORS
 from pytube import YouTube
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://neeraj-youtube-video-downloader.netlify.app"}})
+CORS(app,origins="https://neeraj-youtube-video-downloader.netlify.app")
 
 @app.route('/download', methods=['POST'])
 def download_video():
