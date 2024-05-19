@@ -3,7 +3,7 @@ from flask_cors import CORS
 from pytube import YouTube
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://neeraj-youtube-video-downloader.netlify.app"}})
 
 @app.route('/download', methods=['POST'])
 def download_video():
@@ -25,7 +25,7 @@ def download_video():
         if stream:
             file_path = 'video.mp4'
             stream.download(filename=file_path)
-            return send_file(file_path, as_attachment=True)
+            return send_file(file_path, as_attachment=True, mimetype='video/mp4')
         else:
             return jsonify({"error": "Stream not found"}), 404
     except Exception as e:
