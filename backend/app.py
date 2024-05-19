@@ -30,6 +30,6 @@ def download_video():
             return jsonify({"error": "Stream not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-handler = app
+
 if __name__ == '__main__':
     app.run()
