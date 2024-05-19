@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\trc\Downloads\Youtube\youtube-downloader\netlify\functions\venv"
+VIRTUAL_ENV="C:\Users\trc\Downloads\Youtube\youtube-downloader\backend\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

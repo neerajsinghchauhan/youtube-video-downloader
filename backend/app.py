@@ -1,9 +1,11 @@
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 from pytube import YouTube
+import logging
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+logging.basicConfig(level=logging.DEBUG)
 
 @app.after_request
 def add_cors_headers(response):
@@ -14,7 +16,9 @@ def add_cors_headers(response):
 
 @app.route('/download', methods=['POST'])
 def download_video():
+    logging.debug('Received request')
     data = request.json
+    logging.debug(f'Request data: {data}')
     url = data['url']
     format = data['format']
 
@@ -32,11 +36,14 @@ def download_video():
         if stream:
             file_path = 'video.mp4'
             stream.download(filename=file_path)
+            logging.debug('Download successful')
             return send_file(file_path, as_attachment=True, mimetype='video/mp4')
         else:
+            logging.debug('Stream not found')
             return jsonify({"error": "Stream not found"}), 404
     except Exception as e:
+        logging.error(f'Error: {e}')
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
