@@ -1,15 +1,11 @@
 [build]
-  base = ""
-  publish = "build"
+  base = "frontend"
+  publish = "frontend/build"
   command = "npm run build"
 
-[build.environment]
-  NETLIFY_USE_YARN = "true"
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/"
   status = 200
 
-[functions]
-  directory = "netlify\functions"
