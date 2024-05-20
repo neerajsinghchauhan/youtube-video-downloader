@@ -1,11 +1,11 @@
-[build]
-packages = [
-  "python38"
-]
-commands = [
-  "python -m venv venv",
-  ". venv/bin/activate && pip install -r requirement.txt"
-]
+[phases.install]
+description = "Install dependencies"
+command = "pip install -r requirements.txt"
 
-[start]
-command = ". venv/bin/activate && gunicorn app:app --bind 0.0.0.0:5000"
+[phases.build]
+description = "Build the application"
+command = ""
+
+[phases.start]
+description = "Start the application"
+command = "gunicorn app:app"
