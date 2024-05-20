@@ -1,18 +1,11 @@
 [build]
-builder = "nixpacks/python"
-
-[build.dependencies]
-# Specify the required Python version and other dependencies
-python = "3.9"
-
-[build.commands]
-install = "pip install -r requirements.txt"
-
-[build.environment]
-FLASK_ENV = "production"
+packages = [
+  "python38"
+]
+commands = [
+  "python -m venv venv",
+  ". venv/bin/activate && pip install -r requirement.txt"
+]
 
 [start]
-command = "gunicorn app:app"
-
-[start.environment]
-FLASK_ENV = "production"
+command = ". venv/bin/activate"
