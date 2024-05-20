@@ -1,5 +1,5 @@
 [build]
-  Base = 'youtube-downloader/frontend'
+  Base = '/frontend'
   command = "npm run build"
   publish = "build"
   functions = "backend/functions"
