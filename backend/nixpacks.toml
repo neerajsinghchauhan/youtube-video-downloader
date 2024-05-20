@@ -1,11 +1,36 @@
-[phases.install]
-description = "Install dependencies"
-command = "pip install -r requirements.txt"
+[build]
+# Use the Python build pack
+builder = "nixpacks/python"
 
-[phases.build]
-description = "Build the application"
-command = ""
+# Define the dependencies required
+[build.dependencies]
+# The runtime dependencies needed for the application
+python = "3.9"  # Specify the required Python version
+gunicorn = true
 
-[phases.start]
-description = "Start the application"
+# List the files needed for the build
+files = ["requirements.txt", "Procfile"]
+
+# Command to install the dependencies
+[build.commands]
+install = "pip install -r requirements.txt"
+
+# Specify the environment variables if any
+[build.environment]
+# Example environment variable
+FLASK_ENV = "production"
+
+# Specify the build output
+[build.output]
+# The output directory for the build
+path = "./"
+
+[start]
+# The start command to run the application
+# Here we assume your Flask app entry point is in app.py with the Flask instance named app
 command = "gunicorn app:app"
+
+# Set any necessary environment variables for the start phase
+[start.environment]
+# Example environment variable
+FLASK_ENV = "production"
