@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Container, Form, Button, ProgressBar, Alert } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const VideoDownloader = () => {
   const [url, setUrl] = useState('');
@@ -16,8 +17,8 @@ const VideoDownloader = () => {
     setError('');
     setProgress(0);
     const apiUrl = process.env.NODE_ENV === 'development' 
-      ? 'http://localhost:5000/download' 
-    : `${process.env.REACT_APP_BACKEND_URL}/download`;
+      ? 'http://localhost:8888/.netlify/functions/download' 
+      : `${process.env.REACT_APP_BACKEND_URL}/download`;
 
     try {
       const response = await axios.post(apiUrl, { url, format }, {
@@ -36,6 +37,7 @@ const VideoDownloader = () => {
       toast.success('Download complete!');
     } catch (err) {
       setError('Failed to download video');
+      toast.error('Failed to download video');
     }
     setLoading(false);
   };
