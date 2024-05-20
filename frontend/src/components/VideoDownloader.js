@@ -15,9 +15,12 @@ const VideoDownloader = () => {
     setLoading(true);
     setError('');
     setProgress(0);
-    
+    const apiUrl = process.env.NODE_ENV === 'development' 
+      ? 'http://localhost:5000/download' 
+    : `${process.env.REACT_APP_BACKEND_URL}/download`;
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/download`, { url, format }, {
+      const response = await axios.post(apiUrl, { url, format }, {
         responseType: 'blob',
         onDownloadProgress: (progressEvent) => {
           const total = progressEvent.total;
