@@ -18,7 +18,7 @@ const VideoDownloader = () => {
     setProgress(0);
     const apiUrl = process.env.NODE_ENV === 'development' 
       ? 'http://localhost:5000/download' 
-      : 'https://youtube-video-downloader-6.onrender.com//download';
+      : 'https://youtube-video-downloader-6.onrender.com/download';
 
     try {
       const response = await axios.post(apiUrl, { url, format }, {
