@@ -17,7 +17,7 @@ const VideoDownloader = () => {
     setError('');
     setProgress(0);
     const apiUrl = process.env.NODE_ENV === 'development' 
-      ? 'http://localhost:8888/.netlify/functions/download' 
+      ? 'http://localhost:5000/download' 
       : 'https://youtube-video-downloader-3-2upp.onrender.com/download';
 
     try {
