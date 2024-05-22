@@ -18,7 +18,7 @@ const VideoDownloader = () => {
     setProgress(0);
     const apiUrl = process.env.NODE_ENV === 'development' 
       ? 'http://localhost:8888/.netlify/functions/download' 
-      : `${process.env.REACT_APP_BACKEND_URL}/download`;
+      : 'https://youtube-video-downloader-3-2upp.onrender.com/download';
 
     try {
       const response = await axios.post(apiUrl, { url, format }, {
