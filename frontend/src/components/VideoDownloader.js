@@ -37,6 +37,10 @@ const VideoDownloader = () => {
 
       const blob = new Blob([response.data], { type: 'video/mp4' });
       saveAs(blob, `${videoTitle}.mp4`);
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${videoTitle}.mp4`;
+      link.click();
 
       toast.success('Download complete!');
     } catch (err) {
