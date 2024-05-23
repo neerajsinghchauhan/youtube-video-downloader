@@ -3,12 +3,12 @@ from flask_cors import CORS
 from pytube import YouTube
 import logging
 import os
+import tempfile
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 CORS(app, resources={r"/*": {"origins": "*"}})
 logging.basicConfig(level=logging.DEBUG)
 
-# Route for serving the main page
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
@@ -37,10 +37,13 @@ def download_video():
             return jsonify({"error": "Invalid format"}), 400
 
         if stream:
-            file_path = 'video.mp4'
-            stream.download(filename=file_path)
-            logging.debug('Download successful')
-            return send_file(file_path, as_attachment=True, mimetype='video/mp4')
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
+                stream.download(filename=tmp_file.name)
+                tmp_file_path = tmp_file.name
+                logging.debug('Download successful')
+                response = send_file(tmp_file_path, as_attachment=True, mimetype='video/mp4')
+                response.headers['x-title'] = yt.title
+                return response
         else:
             logging.debug('Stream not found')
             return jsonify({"error": "Stream not found"}), 404

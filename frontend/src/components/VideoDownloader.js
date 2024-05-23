@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { saveAs } from 'file-saver';
 import { Container, Form, Button, ProgressBar, Alert } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -35,10 +36,7 @@ const VideoDownloader = () => {
       }
 
       const blob = new Blob([response.data], { type: 'video/mp4' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = `${videoTitle}.mp4`;
-      link.click();
+      saveAs(blob, `${videoTitle}.mp4`);
 
       toast.success('Download complete!');
     } catch (err) {
