@@ -1,13 +1,21 @@
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, send_file, jsonify, send_from_directory
 from flask_cors import CORS
 from pytube import YouTube
 import logging
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 CORS(app, resources={r"/*": {"origins": "*"}})
 logging.basicConfig(level=logging.DEBUG)
 
-
+# Route for serving the main page
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/download', methods=['POST'])
 def download_video():
