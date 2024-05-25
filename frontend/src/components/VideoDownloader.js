@@ -17,7 +17,7 @@ const VideoDownloader = () => {
     setProgress(0);
     
     try {
-      const response = await axios.post('http://0.0.0.0:10000/download', { url, format }, {
+      const response = await axios.post('http://localhost:5000/download', { url, format }, {
         responseType: 'blob',
         onDownloadProgress: (progressEvent) => {
           const total = progressEvent.total;
