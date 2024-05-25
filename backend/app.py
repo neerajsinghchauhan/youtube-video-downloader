@@ -1,17 +1,15 @@
 from flask import Flask, request, send_file, jsonify, send_from_directory
 from flask_cors import CORS
 from pytube import YouTube
-import logging
 import os
-import tempfile
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
-CORS(app, resources={r"/*": {"origins": "*"}})
-logging.basicConfig(level=logging.DEBUG)
+CORS(app)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
+# Serve the React app
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react_app(path):
     if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
         return send_from_directory(app.static_folder, path)
     else:
@@ -19,9 +17,7 @@ def serve(path):
 
 @app.route('/download', methods=['POST'])
 def download_video():
-    logging.debug('Received request')
     data = request.json
-    logging.debug(f'Request data: {data}')
     url = data['url']
     format = data['format']
 
@@ -37,19 +33,15 @@ def download_video():
             return jsonify({"error": "Invalid format"}), 400
 
         if stream:
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
-                stream.download(filename=tmp_file.name)
-                tmp_file_path = tmp_file.name
-                logging.debug('Download successful')
-                response = send_file(tmp_file_path, as_attachment=True, mimetype='video/mp4')
-                response.headers['x-title'] = yt.title
-                return response
+            file_path = 'video.mp4'
+            stream.download(filename=file_path)
+            return send_file(file_path, as_attachment=True)
         else:
-            logging.debug('Stream not found')
             return jsonify({"error": "Stream not found"}), 404
     except Exception as e:
-        logging.error(f'Error: {e}')
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Render provides the PORT environment variable
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

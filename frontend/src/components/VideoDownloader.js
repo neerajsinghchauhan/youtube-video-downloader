@@ -1,6 +1,6 @@
+// src/components/VideoDownloader.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { saveAs } from 'file-saver';
 import { Container, Form, Button, ProgressBar, Alert } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -10,16 +10,14 @@ const VideoDownloader = () => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
-  const [videoTitle, setVideoTitle] = useState('');
 
   const handleDownload = async () => {
     setLoading(true);
     setError('');
     setProgress(0);
-    setVideoTitle('');
-
+    
     try {
-      const response = await axios.post('http://127.0.0.1:5000/download', { url, format }, {
+      const response = await axios.post('http://localhost:5000/download', { url, format }, {
         responseType: 'blob',
         onDownloadProgress: (progressEvent) => {
           const total = progressEvent.total;
@@ -27,35 +25,16 @@ const VideoDownloader = () => {
           setProgress((current / total) * 100);
         }
       });
-
-      const title = response.headers['x-title'];
-      if (title) {
-        setVideoTitle(title);
-      } else {
-        setVideoTitle('video');
-      }
-
       const blob = new Blob([response.data], { type: 'video/mp4' });
-      saveAs(blob, `${videoTitle}.mp4`);
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.download = `${videoTitle}.mp4`;
+      link.download = 'video.mp4';
       link.click();
-
       toast.success('Download complete!');
     } catch (err) {
       setError('Failed to download video');
     }
     setLoading(false);
-  };
-
-  const isValidUrl = (url) => {
-    try {
-      new URL(url);
-      return url.includes('youtube.com');
-    } catch (error) {
-      return false;
-    }
   };
 
   return (
@@ -90,7 +69,6 @@ const VideoDownloader = () => {
       </Form>
       {loading && <ProgressBar className="w-50 mt-3" now={progress} label={`${Math.round(progress)}%`} />}
       {error && <Alert variant="danger" className="w-50 mt-3">{error}</Alert>}
-      {videoTitle && <Alert variant="success" className="w-50 mt-3">Downloading: {videoTitle}</Alert>}
       <ToastContainer />
     </Container>
   );
