@@ -11,13 +11,15 @@ const VideoDownloader = () => {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
   const handleDownload = async () => {
     setLoading(true);
     setError('');
     setProgress(0);
     
     try {
-      const response = await axios.post('http://localhost:5000/download', { url, format }, {
+      const response = await axios.post(`${backendUrl}/download`, { url, format }, {
         responseType: 'blob',
         onDownloadProgress: (progressEvent) => {
           const total = progressEvent.total;
